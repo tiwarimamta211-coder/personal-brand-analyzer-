@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Brand Analyzer Pro | IncomeAIHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cyan:#00fff2;
+  --purple:#b026ff;
+  --green:#39ff14;
+  --bg:#050510;
+  --bg2:#0a0a1a;
+  --panel:#0d0d20;
+  --border:rgba(0,255,242,0.25);
+  --text:#d8e6ff;
+  --muted:#7d8bab;
+  --danger:#ff3860;
+  --warn:#ffb800;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Rajdhani',sans-serif;
+  min-height:100vh;
+  position:relative;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(0,255,242,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,242,0.05) 1px, transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+  z-index:0;
+}
+body::after{
+  content:"";
+  position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 2px, transparent 4px);
+  pointer-events:none;
+  z-index:1;
+  opacity:0.4;
+}
+.wrap{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:20px 16px 60px;}
+header{
+  text-align:center;
+  padding:30px 10px 20px;
+}
+header h1{
+  font-family:'Orbitron',sans-serif;
+  font-weight:900;
+  font-size:clamp(24px,5vw,44px);
+  background:linear-gradient(90deg,var(--cyan),var(--purple));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  text-shadow:0 0 30px rgba(0,255,242,0.3);
+  letter-spacing:2px;
+}
+header p{
+  color:var(--muted);
+  font-size:15px;
+  margin-top:8px;
+  letter-spacing:1px;
+}
+.badge-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+.badge{
+  border:1px solid var(--border);
+  padding:5px 14px;
+  border-radius:20px;
+  font-size:12px;
+  color:var(--cyan);
+  font-family:'Share Tech Mono',monospace;
+  background:rgba(0,255,242,0.05);
+}
+.ad-slot{
+  border:1px dashed var(--border);
+  background:rgba(255,255,255,0.02);
+  color:var(--muted);
+  text-align:center;
+  padding:14px;
+  font-size:12px;
+  font-family:'Share Tech Mono',monospace;
+  border-radius:8px;
+  margin:20px 0;
+  letter-spacing:1px;
+}
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:22px;
+  margin-bottom:22px;
+  box-shadow:0 0 25px rgba(0,255,242,0.04), inset 0 0 40px rgba(176,38,255,0.02);
+}
+.panel h2{
+  font-family:'Orbitron',sans-serif;
+  font-size:18px;
+  color:var(--cyan);
+  margin-bottom:16px;
+  letter-spacing:1px;
+  display:flex;align-items:center;gap:10px;
+}
+.panel h2 .num{
+  width:26px;height:26px;
+  border:1px solid var(--cyan);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;
+  color:var(--cyan);
+  flex-shrink:0;
+}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:680px){.grid2{grid-template-columns:1fr;}.grid3{grid-template-columns:1fr;}}
+label{
+  display:block;
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:6px;
+  letter-spacing:0.5px;
+  text-transform:uppercase;
+}
+input[type=text],input[type=number],textarea,select{
+  width:100%;
+  background:#080814;
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:8px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:15px;
+  outline:none;
+  transition:border-color .2s, box-shadow .2s;
+}
+input:focus,textarea:focus,select:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 12px rgba(0,255,242,0.25);
+}
+textarea{resize:vertical;min-height:70px;}
+.field{margin-bottom:16px;}
+.checkbox-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.checkbox-row input{width:auto;accent-color:var(--cyan);}
+.checkbox-row label{margin:0;text-transform:none;font-size:14px;color:var(--text);}
+.chip-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{
+  border:1px solid var(--border);
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:13px;
+  cursor:pointer;
+  color:var(--muted);
+  user-select:none;
+  transition:.2s;
+}
+.chip.active{
+  background:rgba(57,255,20,0.1);
+  border-color:var(--green);
+  color:var(--green);
+}
+.platform-row{
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px;
+  margin-bottom:12px;
+  background:rgba(176,38,255,0.03);
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1fr auto;
+  gap:10px;
+  align-items:end;
+}
+@media(max-width:680px){.platform-row{grid-template-columns:1fr;}}
+.btn{
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;
+  letter-spacing:1px;
+  padding:11px 22px;
+  border-radius:8px;
+  border:1px solid var(--cyan);
+  background:transparent;
+  color:var(--cyan);
+  cursor:pointer;
+  transition:.2s;
+}
+.btn:hover{background:rgba(0,255,242,0.12);box-shadow:0 0 18px rgba(0,255,242,0.3);}
+.btn-primary{
+  background:linear-gradient(90deg,var(--cyan),var(--purple));
+  color:#050510;
+  border:none;
+  font-weight:700;
+}
+.btn-primary:hover{box-shadow:0 0 25px rgba(176,38,255,0.5);}
+.btn-danger{border-color:var(--danger);color:var(--danger);}
+.btn-danger:hover{background:rgba(255,56,96,0.12);}
+.btn-sm{padding:6px 12px;font-size:11px;}
+.btn-remove{
+  background:transparent;border:1px solid var(--danger);color:var(--danger);
+  border-radius:6px;padding:9px 12px;cursor:pointer;font-size:12px;
+}
+.action-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:26px 0;}
+#resultsSection{display:none;}
+.score-hero{
+  text-align:center;
+  padding:30px 10px;
+}
+.score-ring-wrap{position:relative;width:220px;height:220px;margin:0 auto;}
+.score-num{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.score-num .val{
+  font-family:'Orbitron',sans-serif;
+  font-size:46px;
+  font-weight:900;
+  color:var(--cyan);
+  text-shadow:0 0 20px rgba(0,255,242,0.5);
+}
+.score-num .grade{
+  font-family:'Share Tech Mono',monospace;
+  font-size:16px;
+  color:var(--purple);
+  margin-top:4px;
+  letter-spacing:2px;
+}
+.score-num .lbl{
+  font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:2px;text-transform:uppercase;
+}
+canvas{max-width:100%;}
+.category-list{display:flex;flex-direction:column;gap:14px;margin-top:10px;}
+.cat-row{display:flex;flex-direction:column;gap:6px;}
+.cat-top{display:flex;justify-content:space-between;font-size:14px;}
+.cat-top .name{color:var(--text);font-weight:600;}
+.cat-top .score{font-family:'Share Tech Mono',monospace;color:var(--cyan);}
+.bar-bg{height:10px;border-radius:6px;background:#0a0a1a;border:1px solid var(--border);overflow:hidden;}
+.bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--purple),var(--cyan));transition:width 1s ease;}
+.sw-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:680px){.sw-grid{grid-template-columns:1fr;}}
+.sw-box{border-radius:10px;padding:16px;border:1px solid var(--border);}
+.sw-box.strength{background:rgba(57,255,20,0.05);border-color:rgba(57,255,20,0.3);}
+.sw-box.weak{background:rgba(255,56,96,0.05);border-color:rgba(255,56,96,0.3);}
+.sw-box h3{font-family:'Orbitron',sans-serif;font-size:14px;margin-bottom:10px;letter-spacing:1px;}
+.sw-box.strength h3{color:var(--green);}
+.sw-box.weak h3{color:var(--danger);}
+.sw-box ul{padding-left:18px;font-size:14px;line-height:1.7;}
+.reco-card{
+  border:1px solid var(--border);
+  border-left:3px solid var(--purple);
+  padding:14px 16px;
+  border-radius:8px;
+  margin-bottom:12px;
+  background:rgba(176,38,255,0.04);
+}
+.reco-card .tag{
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px;color:var(--purple);
+  text-transform:uppercase;letter-spacing:1px;
+}
+.reco-card p{margin-top:6px;font-size:14.5px;line-height:1.5;}
+.history-item{
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px;
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:10px;
+  flex-wrap:wrap;gap:10px;
+}
+.history-item .hi-left{display:flex;flex-direction:column;gap:2px;}
+.history-item .hi-name{font-weight:700;color:var(--text);}
+.history-item .hi-date{font-size:12px;color:var(--muted);font-family:'Share Tech Mono',monospace;}
+.history-item .hi-score{font-family:'Orbitron',sans-serif;color:var(--cyan);font-size:20px;}
+.hindi-guide{
+  background:linear-gradient(135deg,rgba(0,255,242,0.05),rgba(176,38,255,0.05));
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:22px;
+  margin-bottom:22px;
+}
+.hindi-guide h2{
+  font-family:'Orbitron',sans-serif;color:var(--green);font-size:18px;margin-bottom:14px;
+}
+.hindi-guide ol{padding-left:20px;line-height:1.9;font-size:15px;}
+.hindi-guide b{color:var(--cyan);}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 0 10px;font-family:'Share Tech Mono',monospace;}
+.small-note{font-size:12px;color:var(--muted);margin-top:6px;}
+.tabbar{display:flex;gap:10px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
+.tabbar button{
+  font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:1px;
+  padding:10px 20px;border-radius:8px;border:1px solid var(--border);
+  background:transparent;color:var(--muted);cursor:pointer;
+}
+.tabbar button.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,255,242,0.08);}
+.view{display:none;}
+.view.active{display:block;}
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-thumb{background:var(--purple);border-radius:4px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>PERSONAL BRAND ANALYZER PRO</h1>
+    <p>Apni personal brand ki taakat check karein — score, gaps aur action plan ek jagah</p>
+    <div class="badge-row">
+      <span class="badge">⚡ 100% FREE</span>
+      <span class="badge">🔒 NO LOGIN</span>
+      <span class="badge">🇮🇳 MADE FOR INDIAN CREATORS</span>
+    </div>
+  </header>
+
+  <div class="ad-slot" id="ad-top">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="1111111111" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    Advertisement
+  </div>
+
+  <div class="tabbar">
+    <button class="tab-btn active" data-view="analyzeView">🧭 New Analysis</button>
+    <button class="tab-btn" data-view="historyView">📊 History</button>
+  </div>
+
+  <!-- ================= ANALYZE VIEW ================= -->
+  <div id="analyzeView" class="view active">
+
+    <div class="panel">
+      <h2><span class="num">1</span> Basic Brand Identity</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>Naam / Brand Naam</label>
+          <input type="text" id="brandName" placeholder="e.g. Mamta Sharma / IncomeAIHub">
+        </div>
+        <div class="field">
+          <label>Profession / Niche</label>
+          <input type="text" id="niche" placeholder="e.g. Freelance Content Writer, GST Consultant">
+        </div>
+      </div>
+      <div class="field">
+        <label>Target Audience (kaun aapko follow/hire karega)</label>
+        <input type="text" id="audience" placeholder="e.g. Small business owners looking for GST filing help">
+      </div>
+      <div class="field">
+        <label>Unique Value Proposition / Tagline</label>
+        <textarea id="uvp" placeholder="Aap doosron se alag kaise hain? 1-2 lines mein likhein"></textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2><span class="num">2</span> Platforms &amp; Presence</h2>
+      <div id="platformsContainer"></div>
+      <button class="btn btn-sm" id="addPlatformBtn" type="button">+ Platform Add Karein</button>
+      <p class="small-note">Jitne platforms active hain unhein add karein — Instagram, LinkedIn, YouTube, Twitter/X, Fiverr, Upwork, Blog/Website, Facebook, etc.</p>
+    </div>
+
+    <div class="panel">
+      <h2><span class="num">3</span> Content Strategy</h2>
+      <div class="field">
+        <label>Content Pillars / Topics (comma se separate karein)</label>
+        <input type="text" id="pillars" placeholder="e.g. GST tips, Tax saving, Freelancer finance, Client stories">
+      </div>
+      <div class="field">
+        <label>Overall Posting Consistency (sabhi platforms mila kar)</label>
+        <select id="postFreq">
+          <option value="daily">Daily</option>
+          <option value="4-6" selected>4-6 baar / week</option>
+          <option value="2-3">2-3 baar / week</option>
+          <option value="weekly">Weekly</option>
+          <option value="rare">Rarely / Irregular</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2><span class="num">4</span> Visual &amp; Brand Consistency</h2>
+      <div class="checkbox-row"><input type="checkbox" id="v1"><label for="v1">Sabhi platforms par same profile photo hai</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="v2"><label for="v2">Ek fixed color palette / theme use karti/karta hoon</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="v3"><label for="v3">Bio/description sabhi jagah consistent hai</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="v4"><label for="v4">Logo / watermark / signature style hai</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="v5"><label for="v5">Website ya Linktree jaisa central hub hai</label></div>
+    </div>
+
+    <div class="panel">
+      <h2><span class="num">5</span> Engagement &amp; Community</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>Average Engagement Rate (%, agar pata ho)</label>
+          <input type="number" id="engRate" placeholder="e.g. 3.5" step="0.1">
+        </div>
+        <div class="field">
+          <label>Comments/DMs ka reply frequency</label>
+          <select id="engFreq">
+            <option value="always">Hamesha reply karta/karti hoon</option>
+            <option value="mostly" selected>Zyaadatar reply karta/karti hoon</option>
+            <option value="sometimes">Kabhi kabhi</option>
+            <option value="rarely">Rarely</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2><span class="num">6</span> Monetization Readiness</h2>
+      <label style="margin-bottom:10px;">Active Income Streams</label>
+      <div class="chip-grid" id="incomeChips">
+        <div class="chip" data-val="freelance">Freelance Gigs</div>
+        <div class="chip" data-val="digital">Digital Products</div>
+        <div class="chip" data-val="courses">Courses</div>
+        <div class="chip" data-val="sponsor">Sponsorships/Collabs</div>
+        <div class="chip" data-val="affiliate">Affiliate Income</div>
+        <div class="chip" data-val="coaching">Coaching/Consulting</div>
+        <div class="chip" data-val="physical">Physical Products</div>
+        <div class="chip" data-val="none">Abhi koi nahi</div>
+      </div>
+      <div class="field" style="margin-top:16px;">
+        <div class="checkbox-row"><input type="checkbox" id="m1"><label for="m1">Pricing/Rate card ready hai</label></div>
+        <div class="checkbox-row"><input type="checkbox" id="m2"><label for="m2">Portfolio ya past work samples available hain</label></div>
+      </div>
+      <div class="field">
+        <label>Testimonials / Reviews Count</label>
+        <input type="number" id="testimonials" placeholder="e.g. 5" min="0">
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn btn-primary" id="analyzeBtn" type="button">🚀 ANALYZE MY BRAND</button>
+      <button class="btn" id="resetBtn" type="button">↺ Reset Form</button>
+    </div>
+
+    <div class="ad-slot" id="ad-mid">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="2222222222" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      Advertisement
+    </div>
+
+    <!-- RESULTS -->
+    <div id="resultsSection">
+      <div class="panel score-hero">
+        <h2 style="justify-content:center;">📈 Overall Brand Score</h2>
+        <div class="score-ring-wrap">
+          <canvas id="ringCanvas" width="220" height="220"></canvas>
+          <div class="score-num">
+            <div class="val" id="scoreVal">0</div>
+            <div class="grade" id="scoreGrade">-</div>
+            <div class="lbl">out of 100</div>
+          </div>
+        </div>
+        <p id="scoreSummary" style="margin-top:16px;color:var(--muted);font-size:15px;max-width:520px;margin-left:auto;margin-right:auto;"></p>
+      </div>
+
+      <div class="panel">
+        <h2><span class="num">📊</span> Category Breakdown</h2>
+        <div class="grid2">
+          <div>
+            <canvas id="radarCanvas" width="320" height="320" style="width:100%;max-width:320px;display:block;margin:0 auto;"></canvas>
+          </div>
+          <div class="category-list" id="categoryList"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2><span class="num">⚖️</span> Strengths &amp; Weaknesses</h2>
+        <div class="sw-grid">
+          <div class="sw-box strength">
+            <h3>✅ STRENGTHS</h3>
+            <ul id="strengthsList"></ul>
+          </div>
+          <div class="sw-box weak">
+            <h3>⚠️ WEAK AREAS</h3>
+            <ul id="weaknessList"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2><span class="num">🎯</span> Action Plan / Recommendations</h2>
+        <div id="recoContainer"></div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn btn-primary" id="saveBtn" type="button">💾 Save Analysis</button>
+        <button class="btn" id="printBtn" type="button">🖨️ Print / PDF</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= HISTORY VIEW ================= -->
+  <div id="historyView" class="view">
+    <div class="panel">
+      <h2><span class="num">🗂️</span> Saved Analyses</h2>
+      <div id="historyList"></div>
+      <p class="small-note" id="historyEmpty">Abhi tak koi saved analysis nahi hai. New Analysis complete karke "Save Analysis" dabayein.</p>
+    </div>
+  </div>
+
+  <div class="hindi-guide">
+    <h2>📘 इस्तेमाल कैसे करें (Hindi Usage Guide)</h2>
+    <ol>
+      <li><b>Step 1:</b> "New Analysis" tab mein apni basic brand details bharein — naam, niche, target audience aur tagline.</li>
+      <li><b>Step 2:</b> "+ Platform Add Karein" par click karke apne saare active platforms (Instagram, LinkedIn, YouTube, Fiverr, Upwork, etc.) unke followers aur posting frequency ke saath add karein.</li>
+      <li><b>Step 3:</b> Content pillars, visual consistency checklist, engagement details aur monetization streams bharein — jitna sach-sach bharenge, result utna accurate hoga.</li>
+      <li><b>Step 4:</b> "ANALYZE MY BRAND" button dabayein — turant aapko 0-100 ka Brand Score, category-wise radar chart, strengths/weaknesses aur personalized action plan mil jayega.</li>
+      <li><b>Step 5:</b> "Save Analysis" se result save karein — History tab mein aap apni progress time ke saath track kar sakte hain.</li>
+      <li><b>Tip:</b> Har mahine ek baar analysis repeat karein aur dekhen ki score improve ho raha hai ya nahi. Weak areas par diye gaye action items follow karein.</li>
+    </ol>
+  </div>
+
+  <div class="ad-slot" id="ad-bottom">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="3333333333" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    Advertisement
+  </div>
+
+  <footer>
+    IncomeAIHub © 2026 — Personal Brand Analyzer Pro | Data sirf aapke browser mein LocalStorage mein save hoti hai, kahin bhi bheji nahi jaati.
+  </footer>
+</div>
+
+<script>
+(function(){
+  // ---------- TAB SWITCH ----------
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.view).classList.add('active');
+      if(btn.dataset.view==='historyView') renderHistory();
+    });
+  });
+
+  // ---------- PLATFORMS DYNAMIC ROWS ----------
+  const platformNames = ["Instagram","LinkedIn","YouTube","Twitter/X","Facebook","Fiverr","Upwork","Blog/Website","Pinterest","Threads","WhatsApp Channel","Other"];
+  const platformsContainer = document.getElementById('platformsContainer');
+  let platformCount = 0;
+
+  function addPlatformRow(prefill){
+    platformCount++;
+    const id = 'plat_'+platformCount;
+    const row = document.createElement('div');
+    row.className = 'platform-row';
+    row.dataset.id = id;
+    row.innerHTML = `
+      <div>
+        <label>Platform</label>
+        <select class="p-name">${platformNames.map(p=>`<option ${prefill&&prefill.name===p?'selected':''}>${p}</option>`).join('')}</select>
+      </div>
+      <div>
+        <label>Followers/Subscribers</label>
+        <input type="number" class="p-followers" min="0" value="${prefill?prefill.followers:''}" placeholder="e.g. 1200">
+      </div>
+      <div>
+        <label>Posting Frequency</label>
+        <select class="p-freq">
+          <option value="daily" ${prefill&&prefill.freq==='daily'?'selected':''}>Daily</option>
+          <option value="weekly" ${!prefill||prefill.freq==='weekly'?'selected':''}>Weekly</option>
+          <option value="monthly" ${prefill&&prefill.freq==='monthly'?'selected':''}>Monthly</option>
+          <option value="rare" ${prefill&&prefill.freq==='rare'?'selected':''}>Rarely</option>
+        </select>
+      </div>
+      <div>
+        <button class="btn-remove" type="button">✕</button>
+      </div>
+    `;
+    row.querySelector('.btn-remove').addEventListener('click', ()=> row.remove());
+    platformsContainer.appendChild(row);
+  }
+  document.getElementById('addPlatformBtn').addEventListener('click', ()=>addPlatformRow());
+  addPlatformRow({name:'Instagram',followers:'',freq:'weekly'});
+  addPlatformRow({name:'LinkedIn',followers:'',freq:'weekly'});
+
+  function getPlatforms(){
+    return Array.from(platformsContainer.querySelectorAll('.platform-row')).map(r=>({
+      name: r.querySelector('.p-name').value,
+      followers: parseInt(r.querySelector('.p-followers').value)||0,
+      freq: r.querySelector('.p-freq').value
+    }));
+  }
+
+  // ---------- INCOME CHIPS ----------
+  const chips = document.querySelectorAll('#incomeChips .chip');
+  chips.forEach(c=>{
+    c.addEventListener('click', ()=>{
+      if(c.dataset.val==='none'){
+        chips.forEach(x=>x.classList.remove('active'));
+        c.classList.add('active');
+      } else {
+        document.querySelector('[data-val="none"]').classList.remove('active');
+        c.classList.toggle('active');
+      }
+    });
+  });
+  function getIncomeStreams(){
+    return Array.from(chips).filter(c=>c.classList.contains('active')).map(c=>c.dataset.val);
+  }
+
+  // ---------- SCORING ENGINE ----------
+  function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+
+  function computeScores(){
+    const brandName = document.getElementById('brandName').value.trim();
+    const niche = document.getElementById('niche').value.trim();
+    const audience = document.getElementById('audience').value.trim();
+    const uvp = document.getElementById('uvp').value.trim();
+    const pillarsRaw = document.getElementById('pillars').value.trim();
+    const pillars = pillarsRaw ? pillarsRaw.split(',').map(s=>s.trim()).filter(Boolean) : [];
+    const postFreq = document.getElementById('postFreq').value;
+    const platforms = getPlatforms();
+    const engRate = parseFloat(document.getElementById('engRate').value)||0;
+    const engFreq = document.getElementById('engFreq').value;
+    const income = getIncomeStreams();
+    const testimonials = parseInt(document.getElementById('testimonials').value)||0;
+    const m1 = document.getElementById('m1').checked;
+    const m2 = document.getElementById('m2').checked;
+    const visualChecks = ['v1','v2','v3','v4','v5'].map(id=>document.getElementById(id).checked);
+    const visualCount = visualChecks.filter(Boolean).length;
+
+    // 1. Niche Clarity (0-100)
+    let niceClarity = 0;
+    if(niche) niceClarity += 30;
+    if(audience) niceClarity += 30;
+    if(uvp) niceClarity += clamp(uvp.length/1.5, 0, 40);
+    niceClarity = clamp(Math.round(niceClarity),0,100);
+
+    // 2. Content Consistency
+    const freqMap = {daily:100, '4-6':82, '2-3':60, weekly:45, monthly:20, rare:15};
+    let contentConsistency = freqMap[postFreq] ?? 30;
+    contentConsistency += clamp(pillars.length*8, 0, 25) - 25*(pillars.length===0?1:0);
+    if(pillars.length>0) contentConsistency = clamp(contentConsistency + Math.min(pillars.length,5)*3, 0, 100);
+    contentConsistency = clamp(Math.round(contentConsistency),0,100);
+
+    // 3. Platform Presence
+    let platformScore = clamp(platforms.length*18, 0, 60);
+    const totalFollowers = platforms.reduce((a,p)=>a+p.followers,0);
+    if(totalFollowers>0) platformScore += clamp(Math.log10(totalFollowers+1)*10, 0, 40);
+    platformScore = clamp(Math.round(platformScore),0,100);
+
+    // 4. Visual Identity
+    let visualScore = clamp(Math.round((visualCount/5)*100),0,100);
+
+    // 5. Engagement & Community
+    const engFreqMap = {always:40, mostly:30, sometimes:18, rarely:8};
+    let engagementScore = (engFreqMap[engFreq]||10);
+    engagementScore += clamp(engRate*10, 0, 60);
+    engagementScore = clamp(Math.round(engagementScore),0,100);
+
+    // 6. Monetization Readiness
+    let monetizeScore = 0;
+    if(income.includes('none')) monetizeScore = 5;
+    else monetizeScore += clamp(income.length*15, 0, 55);
+    if(m1) monetizeScore += 15;
+    if(m2) monetizeScore += 15;
+    monetizeScore += clamp(testimonials*3, 0, 15);
+    monetizeScore = clamp(Math.round(monetizeScore),0,100);
+
+    const categories = [
+      {key:'niche', name:'Niche Clarity', score:niceClarity},
+      {key:'content', name:'Content Consistency', score:contentConsistency},
+      {key:'platform', name:'Platform Presence', score:platformScore},
+      {key:'visual', name:'Visual Identity', score:visualScore},
+      {key:'engagement', name:'Engagement & Community', score:engagementScore},
+      {key:'monetize', name:'Monetization Readiness', score:monetizeScore},
+    ];
+
+    const weights = {niche:0.20, content:0.18, platform:0.15, visual:0.13, engagement:0.15, monetize:0.19};
+    let overall = 0;
+    categories.forEach(c=> overall += c.score * weights[c.key]);
+    overall = clamp(Math.round(overall),0,100);
+
+    return {brandName, niche, categories, overall, platforms, pillars};
+  }
+
+  function gradeFor(score){
+    if(score>=85) return 'S — Elite Brand';
+    if(score>=70) return 'A — Strong Brand';
+    if(score>=55) return 'B — Growing Brand';
+    if(score>=35) return 'C — Early Stage';
+    return 'D — Needs Foundation';
+  }
+
+  function summaryFor(score){
+    if(score>=85) return "Aapki personal brand bahut mazboot hai! Ab scale aur premium pricing par focus karein.";
+    if(score>=70) return "Aapki brand solid foundation par hai — thodi consistency aur monetization improve karke agle level tak pahunch sakte hain.";
+    if(score>=55) return "Achi shuruaat hai, lekin kuch key areas mein kaam karke aap apni visibility aur income dono badha sakte hain.";
+    if(score>=35) return "Aapki brand abhi early stage mein hai — niche clarity aur consistency par pehle focus karna sabse zaroori hai.";
+    return "Foundation se shuru karein — apni niche, audience aur content pillars pehle clear karein, baaki sab uske baad aasan ho jayega.";
+  }
+
+  // ---------- RECOMMENDATIONS ----------
+  function buildRecommendations(result){
+    const recos = [];
+    const byKey = {};
+    result.categories.forEach(c=>byKey[c.key]=c.score);
+
+    if(byKey.niche < 60){
+      recos.push({tag:'Niche Clarity', text:'Apni niche aur target audience ko ek line mein clearly define karein. Ek strong tagline banayein jo bataye aap kis problem ko solve karte hain.'});
+    }
+    if(byKey.content < 60){
+      recos.push({tag:'Content Consistency', text:'Kam se kam 3-5 fixed content pillars decide karein aur weekly ek content calendar banayein taaki posting regular ho.'});
+    }
+    if(byKey.platform < 50){
+      recos.push({tag:'Platform Presence', text:'1-2 aur relevant platforms par presence banayein jahan aapki target audience active hai, aur follower growth par consistently kaam karein.'});
+    }
+    if(byKey.visual < 60){
+      recos.push({tag:'Visual Identity', text:'Sabhi platforms par same profile photo, color palette aur bio use karein taaki log turant aapko pehchan sakein.'});
+    }
+    if(byKey.engagement < 50){
+      recos.push({tag:'Engagement', text:'Comments aur DMs ka jaldi reply dena start karein — engagement algorithm aur trust dono improve karta hai.'});
+    }
+    if(byKey.monetize < 50){
+      recos.push({tag:'Monetization', text:'Ek clear pricing/rate card banayein aur apna portfolio ya past work publicly showcase karein taaki clients easily convert ho sakein.'});
+    }
+    if(result.pillars.length===0){
+      recos.push({tag:'Content Strategy', text:'Content pillars field khali hai — apne 3-5 core topics list karein jo aap regularly cover karenge.'});
+    }
+    if(recos.length===0){
+      recos.push({tag:'Great Job', text:'Aapki brand ke saare core areas strong hain! Ab consistency banaye rakhein aur naye income streams explore karein.'});
+    }
+    return recos.slice(0,6);
+  }
+
+  function buildStrengthsWeaknesses(result){
+    const sorted = [...result.categories].sort((a,b)=>b.score-a.score);
+    const strengths = sorted.filter(c=>c.score>=65).slice(0,4).map(c=>`${c.name} (${c.score}/100)`);
+    const weaknesses = sorted.filter(c=>c.score<55).slice(-4).map(c=>`${c.name} (${c.score}/100)`);
+    if(strengths.length===0) strengths.push('Abhi koi standout strength nahi — sabhi areas mein foundation banayein');
+    if(weaknesses.length===0) weaknesses.push('Koi major weak area nahi mila — great consistency!');
+    return {strengths, weaknesses};
+  }
+
+  // ---------- CANVAS DRAWING ----------
+  function drawRing(canvas, score){
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    const cx=w/2, cy=h/2, r= w/2 - 14;
+    ctx.clearRect(0,0,w,h);
+    ctx.lineWidth = 16;
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+
+    const grad = ctx.createLinearGradient(0,0,w,h);
+    grad.addColorStop(0,'#00fff2');
+    grad.addColorStop(1,'#b026ff');
+    ctx.strokeStyle = grad;
+    ctx.lineCap='round';
+    ctx.beginPath();
+    ctx.arc(cx,cy,r,-Math.PI/2, -Math.PI/2 + (Math.PI*2*(score/100)));
+    ctx.stroke();
+  }
+
+  function drawRadar(canvas, categories){
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+    const cx=w/2, cy=h/2, r=w/2-40;
+    const n = categories.length;
+    const angleStep = (Math.PI*2)/n;
+
+    // rings
+    for(let ring=1; ring<=4; ring++){
+      ctx.beginPath();
+      for(let i=0;i<=n;i++){
+        const ang = -Math.PI/2 + i*angleStep;
+        const rr = r*(ring/4);
+        const x = cx + rr*Math.cos(ang);
+        const y = cy + rr*Math.sin(ang);
+        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.strokeStyle='rgba(255,255,255,0.08)';
+      ctx.lineWidth=1;
+      ctx.stroke();
+    }
+    // axes + labels
+    ctx.font='10px Rajdhani, sans-serif';
+    ctx.fillStyle='#7d8bab';
+    for(let i=0;i<n;i++){
+      const ang = -Math.PI/2 + i*angleStep;
+      const x = cx + r*Math.cos(ang);
+      const y = cy + r*Math.sin(ang);
+      ctx.beginPath();
+      ctx.moveTo(cx,cy); ctx.lineTo(x,y);
+      ctx.strokeStyle='rgba(255,255,255,0.08)';
+      ctx.stroke();
+      const lx = cx + (r+16)*Math.cos(ang);
+      const ly = cy + (r+16)*Math.sin(ang);
+      ctx.textAlign = Math.cos(ang) > 0.3 ? 'left' : (Math.cos(ang) < -0.3 ? 'right' : 'center');
+      const words = categories[i].name.split(' ');
+      ctx.fillText(words[0], lx, ly);
+    }
+    // data polygon
+    ctx.beginPath();
+    categories.forEach((c,i)=>{
+      const ang = -Math.PI/2 + i*angleStep;
+      const rr = r*(c.score/100);
+      const x = cx + rr*Math.cos(ang);
+      const y = cy + rr*Math.sin(ang);
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.closePath();
+    ctx.fillStyle='rgba(0,255,242,0.18)';
+    ctx.strokeStyle='#00fff2';
+    ctx.lineWidth=2;
+    ctx.fill();
+    ctx.stroke();
+
+    // dots
+    categories.forEach((c,i)=>{
+      const ang = -Math.PI/2 + i*angleStep;
+      const rr = r*(c.score/100);
+      const x = cx + rr*Math.cos(ang);
+      const y = cy + rr*Math.sin(ang);
+      ctx.beginPath();
+      ctx.arc(x,y,3,0,Math.PI*2);
+      ctx.fillStyle='#b026ff';
+      ctx.fill();
+    });
+  }
+
+  // ---------- RENDER RESULTS ----------
+  let lastResult = null;
+
+  function renderResults(result){
+    lastResult = result;
+    document.getElementById('resultsSection').style.display='block';
+    document.getElementById('scoreVal').textContent = result.overall;
+    document.getElementById('scoreGrade').textContent = gradeFor(result.overall);
+    document.getElementById('scoreSummary').textContent = summaryFor(result.overall);
+    drawRing(document.getElementById('ringCanvas'), result.overall);
+    drawRadar(document.getElementById('radarCanvas'), result.categories);
+
+    const catList = document.getElementById('categoryList');
+    catList.innerHTML = '';
+    result.categories.forEach(c=>{
+      const div = document.createElement('div');
+      div.className='cat-row';
+      div.innerHTML = `
+        <div class="cat-top"><span class="name">${c.name}</span><span class="score">${c.score}/100</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:${c.score}%;"></div></div>
+      `;
+      catList.appendChild(div);
+    });
+
+    const sw = buildStrengthsWeaknesses(result);
+    document.getElementById('strengthsList').innerHTML = sw.strengths.map(s=>`<li>${s}</li>`).join('');
+    document.getElementById('weaknessList').innerHTML = sw.weaknesses.map(s=>`<li>${s}</li>`).join('');
+
+    const recos = buildRecommendations(result);
+    document.getElementById('recoContainer').innerHTML = recos.map(r=>`
+      <div class="reco-card"><div class="tag">${r.tag}</div><p>${r.text}</p></div>
+    `).join('');
+
+    document.getElementById('resultsSection').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  document.getElementById('analyzeBtn').addEventListener('click', ()=>{
+    const result = computeScores();
+    renderResults(result);
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', ()=>{
+    if(confirm('Kya aap form reset karna chahte hain?')){
+      document.querySelectorAll('input[type=text],input[type=number],textarea').forEach(el=>el.value='');
+      document.querySelectorAll('.checkbox-row input').forEach(el=>el.checked=false);
+      document.querySelectorAll('#incomeChips .chip').forEach(c=>c.classList.remove('active'));
+      platformsContainer.innerHTML='';
+      addPlatformRow({name:'Instagram',followers:'',freq:'weekly'});
+      document.getElementById('resultsSection').style.display='none';
+    }
+  });
+
+  document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+
+  // ---------- SAVE / HISTORY (LocalStorage) ----------
+  const STORAGE_KEY = 'incomeaihub_brand_analyzer_history';
+
+  function getHistory(){
+    try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }catch(e){ return []; }
+  }
+  function setHistory(list){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+  }
+
+  document.getElementById('saveBtn').addEventListener('click', ()=>{
+    if(!lastResult) return;
+    const list = getHistory();
+    list.unshift({
+      id: Date.now(),
+      date: new Date().toLocaleString('en-IN'),
+      brandName: lastResult.brandName || 'Untitled Brand',
+      niche: lastResult.niche || '-',
+      overall: lastResult.overall,
+      categories: lastResult.categories
+    });
+    setHistory(list.slice(0,30));
+    alert('✅ Analysis save ho gaya! History tab mein dekhein.');
+  });
+
+  function renderHistory(){
+    const list = getHistory();
+    const container = document.getElementById('historyList');
+    const empty = document.getElementById('historyEmpty');
+    if(list.length===0){
+      container.innerHTML='';
+      empty.style.display='block';
+      return;
+    }
+    empty.style.display='none';
+    container.innerHTML = list.map(item=>`
+      <div class="history-item">
+        <div class="hi-left">
+          <span class="hi-name">${item.brandName}</span>
+          <span class="hi-date">${item.date} • ${item.niche}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span class="hi-score">${item.overall}</span>
+          <button class="btn-remove" data-id="${item.id}">✕</button>
+        </div>
+      </div>
+    `).join('');
+    container.querySelectorAll('.btn-remove').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = parseInt(btn.dataset.id);
+        setHistory(getHistory().filter(x=>x.id!==id));
+        renderHistory();
+      });
+    });
+  }
+
+  // number formatting helper (INR locale ready if needed later)
+  window.formatINR = n => new Intl.NumberFormat('en-IN').format(n);
+
+})();
+</script>
+
+<script>
+  // AdSense loader placeholder — replace ca-pub-XXXXXXXXXXXXXXXX with real Publisher ID
+  // <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"><\/script>
+</script>
+</body>
+</html>
